@@ -1,19 +1,20 @@
-
 #!/usr/bin/env python
 
 
 # imports Sip library, contains interface moduels for C++
-import sip
+#import sip
 
 # converts QString to Py v2 unicode rather than Py type, was needed for prototyping
-sip.setapi('QString', 2)
+#sip.setapi('QString', 2)
 
 # imports python maths module, lots of useful tools
 import math
+from os import path
 
 # from PyQt4 library imports QtCore and QtGui, these are the only two used
 from PyQt4 import QtCore, QtGui
-import diagramscene_rc
+
+from yaml import load
 
 
 
@@ -541,6 +542,18 @@ class MainWindow(QtGui.QMainWindow):
     # logic for map buttons to open maps
     def mapButtonGroupClicked(self, button):
         buttons = self.mapButtonGroup.buttons()
+
+        map_fullpath = QtGui.QFileDialog.getOpenFileName()        
+        dir_path = path.dirname(map_fullpath)
+        print dir_path        
+        if map_fullpath is not '':
+            
+            with open(map_fullpath, 'r') as stream:
+                map_data = load(stream)
+                print path.join(dir_path,map_data['image'])
+                # load that image, taking path from map_fullpath
+        
+        
         for myButton in buttons:
             if myButton != button:
                 button.setChecked(False)
